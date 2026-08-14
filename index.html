@@ -1,88 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grayson On The Beats</title>
-
-  <style>
-    body {
-      margin: 0;
-      background: #0b0f14;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-
-    h1 {
-      margin-top: 60px;
-      font-size: 32px;
-    }
-
-    p {
-      color: #aaa;
-      font-size: 18px;
-    }
-
-    a {
-      display: inline-block;
-      background: #ff5368;
-      color: white;
-      text-decoration: none;
-      padding: 15px 25px;
-      border-radius: 10px;
-      font-size: 18px;
-      margin-top: 20px;
-    }
-
-    #studio {
-      margin-top: 100px;
-      padding: 30px 20px;
-    }
-
-    .studio-box {
-      max-width: 400px;
-      margin: 30px auto;
-    }
-
-    .track {
-      background: #121922;
-      border: 1px solid #292f3e;
-      padding: 20px;
-      margin: 12px 0;
-      border-radius: 12px;
-    }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grayson On The Beats</title>
+<style>
+body{
+margin:0;
+background:#0b0f14;
+color:white;
+font-family:Arial,sans-serif;
+text-align:center;
+}
+header{
+padding:55px 15px 25px;
+}
+h1{
+font-size:38px;
+margin:0 0 20px;
+}
+.subtitle{
+color:#aaa;
+font-size:22px;
+margin-bottom:35px;
+}
+button{
+background:#ff5368;
+color:white;
+border:0;
+padding:17px 28px;
+border-radius:14px;
+font-size:19px;
+margin:10px;
+cursor:pointer;
+}
+#studio{
+display:none;
+padding:25px 18px;
+}
+.card{
+background:#121a25;
+border:1px solid #29323e;
+border-radius:18px;
+padding:25px 15px;
+margin:18px 0;
+}
+.card button{
+display:block;
+width:90%;
+margin:15px auto;
+background:#1c2633;
+border:1px solid #394554;
+}
+textarea,input{
+width:90%;
+box-sizing:border-box;
+background:#0b0f14;
+color:white;
+border:1px solid #394554;
+border-radius:10px;
+padding:14px;
+font-size:16px;
+margin:10px;
+}
+#status{
+color:#8cff9a;
+margin:15px;
+font-size:17px;
+}
+</style>
 </head>
 
 <body>
 
-  <h1>🇺🇬 Grayson On The Beats</h1>
+<header>
+<h1>🇺🇬 Grayson On The Beats</h1>
+<div class="subtitle">🎙️ Ugandan Music Studio</div>
+<button onclick="openStudio()">Open Studio</button>
+</header>
 
-  <p>🎙️ Ugandan Music Studio</p>
+<section id="studio">
 
-  <a href="#studio">Open Studio</a>
+<h2>🎵 Welcome To The Studio</h2>
+<p class="subtitle">Start creating your next hit song.</p>
 
-  <section id="studio">
-    <h2>🎵 Welcome To The Studio</h2>
+<div class="card">
+<h2>🎹 Beat Maker</h2>
+<p>Create a simple beat.</p>
+<button onclick="makeBeat()">▶️ Play Beat</button>
+<button onclick="stopBeat()">⏹️ Stop Beat</button>
+<div id="beatStatus"></div>
+</div>
 
-    <p>Start creating your next hit song.</p>
+<div class="card">
+<h2>🎙️ Voice Recorder</h2>
+<p>Record your voice using your phone microphone.</p>
+<button onclick="startRecording()">🔴 Start Recording</button>
+<button onclick="stopRecording()">⏹️ Stop Recording</button>
+<div id="recordStatus">Recorder ready.</div>
+<audio id="audio" controls style="display:none;width:90%;margin:15px auto;"></audio>
+</div>
 
-    <div class="studio-box">
+<div class="card">
+<h2>🎚️ Mixer</h2>
+<p>Adjust your music levels.</p>
 
-      <div class="track">
-        🎹 Beat Maker
-      </div>
+<label>🎵 Beat Volume</label>
+<input type="range" min="0" max="100" value="80"
+oninput="document.getElementById('beatVolume').innerText=this.value+'%'">
 
-      <div class="track">
-        🎙️ Voice Recorder
-      </div>
+<p id="beatVolume">80%</p>
 
-      <div class="track">
-        🎚️ Mixer
-      </div>
+<label>🎙️ Voice Volume</label>
+<input type="range" min="0" max="100" value="80"
+oninput="document.getElementById('voiceVolume').innerText=this.value+'%'">
 
-    </div>
-  </section>
+<p id="voiceVolume">80%</p>
+</div>
+
+<div class="card">
+<h2>✍️ Song Ideas</h2>
+<input id="songName" placeholder="Enter song name">
+<textarea id="lyrics" rows="5" placeholder="Write your lyrics here..."></textarea>
+<button onclick="saveSong()">💾 Save Song Idea</button>
+<div id="status"></div>
+</div>
+
+<button onclick="closeStudio()">⬅️ Close Studio</button>
+
+</section>
+
+<script>
+
+function openStudio(){
+document.getElementById("studio").style.display="block";
+window.scrollTo({
+top:document.getElementById("studio").offsetTop,
+behavior:"smooth"
+});
+}
+
+function closeStudio(){
+document.getElementById("studio").style.display="none";
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+}
+
+let audioContext;
+let oscillator;
+
+function makeBeat(){
+audioContext=new (window.AudioContext||window.webkitAudioContext)();
+
+oscillator=audioContext.createOscillator();
+let gain=audioContext.createGain();
+
+oscillator.type="sine";
+oscillator.frequency.value=120;
+gain.gain.value=0.15;
+
+oscillator.connect(gain);
+gain.connect(audioContext.destination);
+
+oscillator.start();
+
+document.getElementById("beatStatus").innerText="🎵 Beat is playing...";
+}
+
+function stopBeat(){
+if(oscillator){
+oscillator.stop();
+oscillator=null;
+document.getElementById("beatStatus").innerText="⏹️ Beat stopped.";
+}
+}
+
+let recorder;
+let chunks=[];
+
+async function startRecording(){
+
+try{
+
+let stream=await navigator.mediaDevices.getUserMedia({audio:true});
+
+recorder=new MediaRecorder(stream);
+chunks=[];
+
+recorder.ondataavailable=e=>{
+chunks.push(e.data);
+};
+
+recorder.onstop=()=>{
+
+let blob=new Blob(chunks,{type:"audio/webm"});
+let url=URL.createObjectURL(blob);
+
+let audio=document.getElementById("audio");
+audio.src=url;
+audio.style.display="block";
+
+document.getElementById("recordStatus").innerText="✅ Recording finished.";
+
+};
+
+recorder.start();
+
+document.getElementById("recordStatus").innerText="🔴 Recording...";
+
+}catch(error){
+
+document.getElementById("recordStatus").innerText=
+"❌ Microphone permission was not allowed.";
+
+}
+
+}
+
+function stopRecording(){
+
+if(recorder && recorder.state!=="inactive"){
+recorder.stop();
+}
+
+}
+
+function saveSong(){
+
+let name=document.getElementById("songName").value;
+let lyrics=document.getElementById("lyrics").value;
+
+if(name==="" && lyrics===""){
+document.getElementById("status").innerText="⚠️ Write something first.";
+return;
+}
+
+localStorage.setItem("songName",name);
+localStorage.setItem("lyrics",lyrics);
+
+document.getElementById("status").innerText="✅ Song idea saved on this device.";
+
+}
+
+</script>
 
 </body>
-</html>
+  </html>
