@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090a0f">
+<link rel="manifest" href="manifest.json">
+<title>UG Full Recording Studio</title>
+<style>
+:root{--bg:#08090d;--panel:#12141b;--panel2:#191c25;--line:#2a2e3a;--txt:#f7f8fb;--muted:#9da4b2;--gold:#ffbd2e;--green:#2ed47a;--red:#ff5263;--blue:#5da9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#171a24,#08090d 55%);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:20;padding:13px 15px;background:#08090df2;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:18px}.ug{font-size:23px}.sub{color:var(--muted);font-size:12px;font-weight:600}
+main{max-width:1100px;margin:auto;padding:14px 12px 90px}.hero{padding:10px 3px 14px}.hero h1{font-size:31px;line-height:1.05;margin:5px 0 8px}.hero p{color:var(--muted);margin:0}
+.nav{display:flex;gap:7px;overflow:auto;position:sticky;top:55px;z-index:19;background:#08090dee;padding:7px 0 11px}.nav button{white-space:nowrap}
+button,.btn{border:1px solid var(--line);background:var(--panel2);color:var(--txt);padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer}.primary{background:var(--gold);color:#17120a;border-color:var(--gold)}.green{background:var(--green);color:#06130c;border-color:var(--green)}.danger{background:var(--red);color:white;border-color:var(--red)}.blue{background:var(--blue);color:#06101d;border-color:var(--blue)}button:disabled{opacity:.45;cursor:not-allowed}
+.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}.card{background:linear-gradient(145deg,#151821,#0f1117);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 12px 35px #0005}.card h2{margin:0 0 10px;font-size:19px}
+label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}input,select,textarea{width:100%;border:1px solid var(--line);background:#0b0d12;color:var(--txt);border-radius:10px;padding:10px;font:inherit}textarea{min-height:82px}
+.row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.status{padding:10px;border-radius:10px;background:#0b0d12;border:1px solid var(--line);color:#cbd0da;font-size:13px;margin-top:9px}.muted{color:var(--muted)}.big{font-size:38px;font-weight:950;font-variant-numeric:tabular-nums}.meter{height:11px;background:#292e38;border-radius:20px;overflow:hidden;margin:7px 0}.meter i{display:block;height:100%;width:0;background:var(--green);transition:.08s}.meter.red i{background:var(--red)}
+.knob{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:5px 8px;color:#d8dbe3;font-size:11px;margin:2px}.track{padding:11px;border:1px solid var(--line);border-radius:12px;background:#0d0f14;margin-top:8px}.track strong{display:block}.track small{color:var(--muted)}
+.wave{width:100%;height:130px;background:#080a0f;border:1px solid var(--line);border-radius:12px}.fader{appearance:none;width:100%}
+.ok{color:var(--green)}.warn{color:var(--gold)}.bad{color:var(--red)}
+footer{text-align:center;color:#666;font-size:11px;margin-top:25px}
+@media(max-width:600px){.hero h1{font-size:27px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span class="ug">🇺🇬</span> UG Full Recording Studio <span class="sub">• Producer Suite</span></div></header>
+<main>
+<section class="hero"><h1>Your pocket recording studio.</h1><p>Automatic Recording Engineer • Music Producer • Vocal Producer/Coach • Assistant Engineer • Session Musicians • Studio Manager — built for Ugandan artists.</p></section>
+
+<nav class="nav">
+<button class="tab active" data-page="record">🎙️ Record</button>
+<button class="tab" data-page="producer">🎹 Producer</button>
+<button class="tab" data-page="vocal">🎤 Vocal</button>
+<button class="tab" data-page="engineer">🎚️ Engineer</button>
+<button class="tab" data-page="musicians">🎸 Musicians</button>
+<button class="tab" data-page="manager">📋 Manager</button>
+</nav>
+
+<section id="record" class="page active">
+<div class="grid">
+<div class="card">
+<h2>🎙️ Main Recording Booth</h2>
+<label>Artist / Song</label><input id="songName" placeholder="e.g. My New Song">
+<label>Recording style</label><select id="style"><option>Ugandan Afrobeat</option><option>Afro-Dancehall</option><option>Amapiano</option><option>Afro-R&B</option><option>Gospel Afrobeat</option><option>Kadongo Kamu</option></select>
+<label>Tempo <b id="bpmText">100 BPM</b></label><input id="bpm" type="range" min="70" max="150" value="100">
+<div class="row"><button class="primary" id="startBeat">▶ Beat</button><button id="stopBeat">■ Stop Beat</button><button id="metronome">🕒 Click: OFF</button></div>
+<div class="status" id="recStatus">Allow microphone access when you press Record.</div>
+<div id="clock" class="big">00:00</div>
+<div class="row"><button class="green" id="record">● RECORD</button><button class="danger" id="stop" disabled>■ STOP</button><button id="newTake">＋ New Take</button></div>
+<div class="row"><a id="download" class="btn primary" style="display:none" download>⬇ Download Song</a></div>
+</div>
+<div class="card">
+<h2>📊 Input Meter</h2><div class="meter"><i id="inputMeter"></i></div>
+<h2 style="margin-top:18px">🎛️ Auto Recording Engineer</h2>
+<div id="autoEngineer" class="status">Ready — after recording, I will analyze your take and recommend gain, noise, EQ, compression and vocal actions.</div>
+<div class="row"><button class="blue" id="analyze">Analyze Latest Take</button></div>
+</div>
+</div>
+<div class="card" style="margin-top:12px">
+<h2>🎧 Takes</h2><div id="takes"><span class="muted">No takes yet.</span></div>
+</div>
+</section>
+
+<section id="producer" class="page">
+<div class="grid">
+<div class="card"><h2>🎹 Auto Music Producer</h2>
+<label>Describe the record</label><textarea id="prompt" placeholder="Ugandan Afrobeat, romantic, Luganda + English, warm guitar, danceable chorus, Kampala night feeling"></textarea>
+<label>Producer direction</label><select id="prodMode"><option>Radio-ready</option><option>Club / dance</option><option>TikTok hook focused</option><option>Emotional / intimate</option><option>Live-band feel</option></select>
+<div class="row"><button class="primary" id="produce">Build Production</button></div><div id="production" class="status">Describe your song and the producer will create a session recipe.</div>
+</div>
+<div class="card"><h2>🥁 Beat Machine</h2><p class="muted">Browser-generated accompaniment for practice/demo sessions.</p>
+<div class="row"><button class="primary" id="beatA">Afrobeat</button><button id="beatD">Dancehall</button><button id="beatAmap">Amapiano</button></div>
+<div id="beatPattern" class="status">Choose a pattern.</div></div>
+</div>
+</section>
+
+<section id="vocal" class="page">
+<div class="grid">
+<div class="card"><h2>🎤 Vocal Producer</h2>
+<label>Target note (Hz)</label><input id="target" type="number" value="220" min="80" max="800">
+<div id="pitch" class="big">— Hz</div><div class="meter"><i id="pitchMeter"></i></div>
+<div class="row"><button class="green" id="pitchStart">Start Coach</button><button id="pitchStop">Stop</button></div>
+<div id="vocalAdvice" class="status">Sing a steady “ah”. I’ll show how close you are to the target.</div>
+</div>
+<div class="card"><h2>🧑‍🏫 Vocal Coach</h2><ul>
+<li>Warm up before difficult notes.</li><li>Keep your jaw and shoulders relaxed.</li><li>Use breath support rather than squeezing your throat.</li><li>Record one chorus softly, one normally and one with performance energy.</li><li>Choose the take with the best emotion and timing — not simply the loudest.</li>
+</ul><div class="status">⚠️ Never force a painful note. If your voice hurts, stop and rest.</div></div>
+</div>
+</section>
+
+<section id="engineer" class="page">
+<div class="grid">
+<div class="card"><h2>🎚️ Assistant Engineer</h2>
+<label>Vocal gain</label><input id="gain" class="fader" type="range" min="0" max="100" value="70">
+<label>Compression</label><input id="comp" class="fader" type="range" min="0" max="100" value="45">
+<label>EQ brightness</label><input id="eq" class="fader" type="range" min="0" max="100" value="55">
+<label>Reverb</label><input id="reverb" class="fader" type="range" min="0" max="100" value="20">
+<div class="row"><button class="primary" id="autoMix">✨ Auto Mix My Vocal</button><button id="resetMix">Reset</button></div>
+<div id="mixAdvice" class="status">Use Auto Mix for a safe starting point.</div>
+</div>
+<div class="card"><h2>🧪 Recording Checklist</h2>
+<div id="checklist"></div>
+</div>
+</div>
+</section>
+
+<section id="musicians" class="page">
+<div class="grid">
+<div class="card"><h2>🎸 Session Musicians</h2>
+<label>Choose instrument</label><select id="instrument"><option>Acoustic Guitar</option><option>Electric Guitar</option><option>Bass</option><option>Piano / Keys</option><option>Drums</option><option>Percussion</option><option>Brass</option><option>Strings</option></select>
+<label>Performance brief</label><textarea id="brief" placeholder="Warm guitar intro, simple chords, leave space for vocal..."></textarea>
+<button class="primary" id="session">Create Session Brief</button><div id="sessionOut" class="status"></div>
+</div>
+<div class="card"><h2>🎼 Arrangement Team</h2>
+<div class="pill">Drummer</div><div class="pill">Bassist</div><div class="pill">Guitarist</div><div class="pill">Keys</div><div class="pill">Percussion</div><div class="pill">Backing Vocalists</div>
+<p class="muted">The app can create written parts/briefs and a browser demo beat. It cannot physically hire or record a real musician from inside the phone.</p>
+</div>
+</div>
+</section>
+
+<section id="manager" class="page">
+<div class="grid">
+<div class="card"><h2>📋 Studio Manager</h2>
+<label>Session goal</label><select id="goal"><option>Finish a single</option><option>Record vocals</option><option>Make a demo</option><option>Prepare a TikTok song</option><option>Prepare a live performance</option></select>
+<button class="primary" id="schedule">Build Session Plan</button><div id="scheduleOut" class="status"></div>
+</div>
+<div class="card"><h2>🇺🇬 Ugandan Artist Manager</h2>
+<ul><li>Keep your original masters and agreements organized.</li><li>Build relationships with producers, DJs, dancers, creators and promoters.</li><li>Make songs easy to sing and share.</li><li>Use TikTok/Shorts/Reels to test hooks before a major release.</li><li>Budget recording, visuals and promotion; don't spend everything on one release.</li><li>Protect your reputation and treat collaborators fairly.</li></ul>
+</div>
+</div>
+</section>
+<footer>UG Full Recording Studio • Client-side demo studio. Your recordings stay on your device unless you choose to share them.</footer>
+</main>
+
+<script>
+let AC=null,mic=null,src=null,analyser=null,rec=null,chunks=[],beatTimer=null,beatGain=null,recording=false,startAt=0,timer=null,pitchStream=null,pitchCtx=null,pitchAnalyser=null,pitchTimer=null,met=false,takeNo=0;
+const $=x=>document.getElementById(x);
+const tabs=document.querySelectorAll('.tab');tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.page).classList.add('active')});
+function audio(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();return AC}
+$('bpm').oninput=e=>$('bpmText').textContent=e.target.value+' BPM';
+function osc(f,t,d,gain,type='sine'){let o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.value=gain;o.connect(g).connect(beatGain);o.start(t);o.stop(t+d)}
+function kick(t){let o=AC.createOscillator(),g=AC.createGain();o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(45,t+.1);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.65,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+.16);o.connect(g).connect(beatGain);o.start(t);o.stop(t+.17)}
+function snare(t){let b=AC.createBuffer(1,AC.sampleRate*.12,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/d.length*18);let s=AC.createBufferSource(),g=AC.createGain();s.buffer=b;g.gain.value=.16;s.connect(g).connect(beatGain);s.start(t)}
+function hat(t){osc(6500,t,.03,.025,'square')}
+function stopBeat(){if(beatTimer)clearInterval(beatTimer);beatTimer=null;if(beatGain)try{beatGain.disconnect()}catch(e){}}
+function startBeat(kind='Afrobeat'){
+let a=audio();a.resume();stopBeat();beatGain=a.createGain();beatGain.gain.value=.55;beatGain.connect(a.destination);
+let bpm=+$('bpm').value, step=60/bpm/2,i=0;
+$('beatPattern').textContent=kind+' practice pattern at '+bpm+' BPM.';
+beatTimer=setInterval(()=>{let t=a.currentTime+.01,p=i%8;if(kind==='Afrobeat'){if([0,3,5].includes(p))kick(t);if([2,6].includes(p))snare(t);hat(t);if([0,4].includes(p))osc(55,t,.22,.12)}else if(kind==='Dancehall'){if([0,4].includes(p))kick(t);if([2,6].includes(p))snare(t);if(p%2===0)hat(t);if([0,3,5].includes(p))osc(65,t,.2,.12)}else{if([0,4].includes(p))kick(t);if([2,6].includes(p))snare(t);hat(t);if([0,2,4,6].includes(p))osc([55,49,65,58][p],t,.18,.11)}i++},step*1000);
+}
+$('startBeat').onclick=()=>startBeat($('style').value.includes('Dancehall')?'Dancehall':$('style').value.includes('Amapiano')?'Amapiano':'Afrobeat');$('stopBeat').onclick=stopBeat;
+$('beatA').onclick=()=>startBeat('Afrobeat');$('beatD').onclick=()=>startBeat('Dancehall');$('beatAmap').onclick=()=>startBeat('Amapiano');
+$('metronome').onclick=()=>{met=!met;$('metronome').textContent='🕒 Click: '+(met?'ON':'OFF')};
+
+function updateMeter(){if(!analyser||!recording)return;let a=new Uint8Array(analyser.fftSize);analyser.getByteTimeDomainData(a);let sum=0;for(let x of a){let v=(x-128)/128;sum+=v*v}let rms=Math.sqrt(sum/a.length);$('inputMeter').style.width=Math.min(100,rms*250)+'%';requestAnimationFrame(updateMeter)}
+async function recordStart(){
+try{
+let a=audio();await a.resume();mic=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:false}});
+src=a.createMediaStreamSource(mic);analyser=a.createAnalyser();analyser.fftSize=1024;src.connect(analyser);
+let destination=a.createMediaStreamDestination();src.connect(destination);
+if(beatGain)beatGain.connect(destination);
+rec=new MediaRecorder(destination.stream);chunks=[];rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+rec.onstop=finishTake;rec.start(100);recording=true;startAt=Date.now();timer=setInterval(()=>{let s=Math.floor((Date.now()-startAt)/1000);$('clock').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},250);
+$('record').disabled=true;$('stop').disabled=false;$('recStatus').innerHTML='<span class="ok">● Recording...</span> Automatic engineer is monitoring your input.';updateMeter();
+}catch(e){$('recStatus').innerHTML='<span class="bad">Microphone blocked.</span> Open this app from HTTPS/localhost, or use Chrome/Samsung Internet with microphone permission enabled. Android may block mic access when an HTML file is opened directly from Downloads.'}
+}
+function finishTake(){let blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'}),url=URL.createObjectURL(blob);takeNo++;let name=(($('songName').value||'UG-Star-Song').replace(/[^a-z0-9_-]+/gi,'_'))+'_Take_'+takeNo+'.webm';$('download').href=url;$('download').download=name;$('download').textContent='⬇ Download '+name;$('download').style.display='inline-block';let d=document.createElement('div');d.className='track';d.innerHTML='<strong>Take '+takeNo+' • '+new Date().toLocaleTimeString()+'</strong><small>WebM recording • '+Math.round(blob.size/1024)+' KB</small>';d.onclick=()=>{ $('download').href=url;$('download').download=name;$('download').style.display='inline-block'};$('takes').querySelector('.muted')?.remove();$('takes').prepend(d);
+$('autoEngineer').innerHTML='<b>Auto Engineer report:</b> Take captured successfully. Suggested starting chain: high-pass vocal cleanup → gentle compression → de-esser if needed → light EQ → short room reverb. Listen before making heavy changes.';
+$('recStatus').innerHTML='<span class="ok">✓ Take saved in this browser.</span>'; $('record').disabled=false;$('stop').disabled=true;recording=false;clearInterval(timer);mic?.getTracks().forEach(t=>t.stop());
+}
+$('record').onclick=recordStart;$('stop').onclick=()=>{if(rec&&recording)rec.stop()};$('newTake').onclick=()=>{$('clock').textContent='00:00';$('recStatus').textContent='Ready for a new take.'};
+
+$('analyze').onclick=()=>{$('autoEngineer').innerHTML='<b>Auto Engineer:</b><br>1. Input: aim for peaks around -12 to -6 dBFS.<br>2. Noise: record away from fans/traffic.<br>3. Vocal: keep 10–15 cm from mic and use consistent distance.<br>4. Performance: keep the strongest emotional take.<br>5. Mix: don't over-compress; leave headroom for mastering.'};
+
+$('produce').onclick=()=>{let p=$('prompt').value||'Ugandan Afrobeat';let mode=$('prodMode').value;let bpm=$('bpm').value;$('production').innerHTML='<b>Producer session:</b> '+p+'<br><br><b>Direction:</b> '+mode+'<br><b>Tempo:</b> '+bpm+' BPM<br><b>Arrangement:</b> 4-bar intro → verse → pre-hook → memorable 8-bar chorus → verse → chorus → bridge → final chorus.<br><b>Ugandan touch:</b> leave space for Luganda phrasing, percussion and a hook that works as a short social-video clip.'};
+
+function pitchHz(buf,sr){let z=0;for(let x of buf)z+=x*x;if(Math.sqrt(z/buf.length)<.012)return null;let c=0;for(let i=1;i<buf.length;i++)if(buf[i-1]<0&&buf[i]>=0)c++;return c*sr/buf.length}
+$('pitchStart').onclick=async()=>{try{pitchStream=await navigator.mediaDevices.getUserMedia({audio:true});pitchCtx=new AudioContext();let s=pitchCtx.createMediaStreamSource(pitchStream);pitchAnalyser=pitchCtx.createAnalyser();pitchAnalyser.fftSize=2048;s.connect(pitchAnalyser);let b=new Float32Array(2048);pitchTimer=setInterval(()=>{pitchAnalyser.getFloatTimeDomainData(b);let hz=pitchHz(b,pitchCtx.sampleRate);if(!hz){$('pitch').textContent='— Hz';return}let tar=+$('target').value,score=Math.max(0,100-Math.min(100,Math.abs(hz-tar)/tar*100));$('pitch').textContent=Math.round(hz)+' Hz';$('pitchMeter').style.width=score+'%';$('vocalAdvice').textContent=score>92?'Excellent match — repeat it and hold the note.':score>75?'Close — adjust gently and listen to the target.':'Move your pitch slowly toward the target; don't force it.'},90)}catch(e){$('vocalAdvice').textContent='Microphone access is blocked. Allow microphone permission or use HTTPS/localhost.'}};
+$('pitchStop').onclick=()=>{clearInterval(pitchTimer);pitchStream?.getTracks().forEach(t=>t.stop());$('pitchMeter').style.width='0';$('vocalAdvice').textContent='Coach stopped.'};
+
+$('autoMix').onclick=()=>{$('gain').value=68;$('comp').value=42;$('eq').value=58;$('reverb').value=18;$('mixAdvice').innerHTML='<b>Auto Mix starting preset:</b> moderate input gain, gentle compression, slight presence, short room reverb. Adjust by ear after listening on headphones and speakers.'};
+$('resetMix').onclick=()=>{$('gain').value=70;$('comp').value=45;$('eq').value=55;$('reverb').value=20;$('mixAdvice').textContent='Use Auto Mix for a safe starting point.'};
+
+$('session').onclick=()=>{let i=$('instrument').value,b=$('brief').value||'support the vocal without overcrowding it';$('sessionOut').innerHTML='<b>'+i+' brief</b><br>Tempo: '+$('bpm').value+' BPM<br>Brief: '+b+'<br><br>Play with a clean 4-bar idea first, then create a variation for the chorus. Leave space for the lead vocal.'};
+$('schedule').onclick=()=>{let g=$('goal').value;$('scheduleOut').innerHTML='<b>Studio plan — '+g+'</b><br>1. 10 min setup + level check<br>2. 10 min vocal warm-up / sound check<br>3. 20 min guide/demo<br>4. 30–60 min main takes<br>5. 15 min comp the best takes<br>6. 15 min rough mix<br>7. Export a safety copy and label the session clearly.'};
+
+const checks=['Mic input works','Headphones connected','Peak level controlled','Room/fan noise minimized','Song key and BPM confirmed','Lead vocal recorded','Best takes marked','Rough mix checked','Master/session backup saved'];
+$('checklist').innerHTML=checks.map((x,i)=>'<label><input type="checkbox" class="chk"> '+x+'</label>').join('');
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+</script>
+</body>
+</html>
