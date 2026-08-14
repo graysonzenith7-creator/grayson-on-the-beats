@@ -1,71 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grayson On The Beats</title>
+<meta name="theme-color" content="#080b12">
+<title>Grayson On The Beats | Music Studio</title>
+
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#080b12;
+--panel:#101621;
+--panel2:#151d2a;
+--line:#263244;
+--text:#fff;
+--muted:#8e9aaa;
+--pink:#ff4f6d;
+--pink2:#ff758c;
+--green:#24d88a;
+--blue:#4d8dff;
+}
+
 body{
-margin:0;
-background:#0b0f14;
-color:white;
-font-family:Arial,sans-serif;
-text-align:center;
+background:var(--bg);
+color:var(--text);
+font-family:Inter,Arial,sans-serif;
+min-height:100vh;
 }
-header{
-padding:55px 15px 25px;
-}
-h1{
-font-size:38px;
-margin:0 0 20px;
-}
-.subtitle{
-color:#aaa;
-font-size:22px;
-margin-bottom:35px;
-}
+
+button,input,textarea,select{font:inherit}
+
 button{
-background:#ff5368;
-color:white;
 border:0;
-padding:17px 28px;
-border-radius:14px;
-font-size:19px;
-margin:10px;
 cursor:pointer;
 }
-#studio{
-display:none;
-padding:25px 18px;
+
+header{
+position:sticky;
+top:0;
+z-index:100;
+background:rgba(8,11,18,.94);
+backdrop-filter:blur(15px);
+border-bottom:1px solid var(--line);
 }
-.card{
-background:#121a25;
-border:1px solid #29323e;
-border-radius:18px;
-padding:25px 15px;
-margin:18px 0;
+
+.nav{
+max-width:1150px;
+margin:auto;
+height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 18px;
 }
-.card button{
-display:block;
-width:90%;
-margin:15px auto;
-background:#1c2633;
-border:1px solid #394554;
+
+.logo{
+font-size:21px;
+font-weight:800;
+white-space:nowrap;
 }
-textarea,input{
-width:90%;
-box-sizing:border-box;
-background:#0b0f14;
+
+.logo span{color:var(--pink)}
+
+.navlinks{
+display:flex;
+gap:6px;
+}
+
+.navlinks button{
+background:transparent;
+color:#aeb8c8;
+padding:11px 13px;
+border-radius:10px;
+}
+
+.navlinks button.active,
+.navlinks button:hover{
+background:var(--panel2);
 color:white;
-border:1px solid #394554;
+}
+
+.menu{
+display:none;
+background:var(--panel2);
+color:white;
+font-size:25px;
+padding:8px 12px;
+border-radius:10px;
+}
+
+main{
+max-width:1150px;
+margin:auto;
+padding:0 18px 80px;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.hero{
+min-height:600px;
+display:grid;
+grid-template-columns:1.1fr .9fr;
+align-items:center;
+gap:50px;
+}
+
+.badge{
+display:inline-block;
+padding:8px 13px;
+border:1px solid #3b2d35;
+background:#181119;
+color:#ff91a3;
+border-radius:30px;
+margin-bottom:20px;
+font-size:13px;
+font-weight:700;
+}
+
+.hero h1{
+font-size:clamp(42px,7vw,78px);
+line-height:.98;
+margin-bottom:22px;
+letter-spacing:-3px;
+}
+
+.hero h1 span{
+color:var(--pink);
+}
+
+.hero p{
+color:var(--muted);
+font-size:19px;
+line-height:1.7;
+max-width:650px;
+}
+
+.actions{
+display:flex;
+gap:12px;
+margin-top:30px;
+flex-wrap:wrap;
+}
+
+.primary{
+background:linear-gradient(135deg,var(--pink),var(--pink2));
+color:white;
+padding:15px 23px;
+border-radius:12px;
+font-weight:800;
+box-shadow:0 12px 30px #ff4f6d25;
+}
+
+.secondary{
+background:var(--panel2);
+color:white;
+padding:15px 23px;
+border:1px solid var(--line);
+border-radius:12px;
+}
+
+.heroCard{
+background:linear-gradient(145deg,#121a27,#0d121b);
+border:1px solid var(--line);
+border-radius:25px;
+padding:25px;
+box-shadow:0 30px 70px #0008;
+}
+
+.wave{
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
+overflow:hidden;
+}
+
+.wave i{
+display:block;
+width:5px;
+border-radius:10px;
+background:var(--pink);
+animation:wave 1s infinite ease-in-out;
+}
+
+.wave i:nth-child(2n){animation-delay:.1s}
+.wave i:nth-child(3n){animation-delay:.2s}
+.wave i:nth-child(4n){animation-delay:.3s}
+
+@keyframes wave{
+0%,100%{height:25px}
+50%{height:120px}
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px;
+}
+
+.stat{
+background:var(--panel);
+border-radius:13px;
+padding:15px;
+text-align:center;
+}
+
+.stat strong{
+display:block;
+font-size:22px;
+}
+
+.stat small{color:var(--muted)}
+
+.sectionTitle{
+padding:45px 0 25px;
+}
+
+.sectionTitle h2{
+font-size:32px;
+margin-bottom:8px;
+}
+
+.sectionTitle p{color:var(--muted)}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+
+.card{
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:18px;
+padding:23px;
+}
+
+.card h3{
+margin-bottom:10px;
+font-size:20px;
+}
+
+.card p{
+color:var(--muted);
+line-height:1.6;
+}
+
+.icon{
+font-size:35px;
+margin-bottom:15px;
+}
+
+.openBtn{
+width:100%;
+margin-top:20px;
+padding:13px;
+border-radius:10px;
+background:var(--panel2);
+border:1px solid var(--line);
+color:white;
+}
+
+.studioTop{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:35px 0 20px;
+gap:15px;
+}
+
+.studioTop h2{font-size:32px}
+
+.projectName{
+background:var(--panel);
+border:1px solid var(--line);
+color:white;
+padding:12px;
+border-radius:9px;
+width:220px;
+}
+
+.workspace{
+display:grid;
+grid-template-columns:1fr 330px;
+gap:18px;
+}
+
+.tool{
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:18px;
+padding:20px;
+margin-bottom:18px;
+}
+
+.tool h3{
+margin-bottom:18px;
+font-size:20px;
+}
+
+.tool small{color:var(--muted)}
+
+.bigButton{
+padding:14px 18px;
+border-radius:10px;
+background:var(--pink);
+color:white;
+font-weight:700;
+margin:5px 4px 5px 0;
+}
+
+.darkButton{
+padding:14px 18px;
+border-radius:10px;
+background:var(--panel2);
+color:white;
+border:1px solid var(--line);
+margin:5px 4px 5px 0;
+}
+
+input[type=file]{
+width:100%;
+background:var(--panel2);
+color:#aaa;
+padding:12px;
+border-radius:9px;
+margin-bottom:12px;
+}
+
+input[type=range]{
+width:100%;
+accent-color:var(--pink);
+margin:15px 0;
+}
+
+textarea,
+.textInput{
+width:100%;
+background:#0a0e15;
+border:1px solid var(--line);
 border-radius:10px;
 padding:14px;
-font-size:16px;
-margin:10px;
+color:white;
+outline:none;
 }
-#status{
-color:#8cff9a;
-margin:15px;
-font-size:17px;
+
+textarea{
+min-height:260px;
+resize:vertical;
+line-height:1.7;
+}
+
+.textInput:focus,
+textarea:focus{border-color:var(--pink)}
+
+audio{
+width:100%;
+margin-top:15px;
+}
+
+.meter{
+height:12px;
+background:#202938;
+border-radius:20px;
+overflow:hidden;
+margin:15px 0;
+}
+
+.meter div{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,var(--green),#ffe55c,var(--pink));
+transition:.1s;
+}
+
+.status{
+color:var(--muted);
+margin-top:10px;
+font-size:14px;
+}
+
+.recording{
+color:#ff5368!important;
+font-weight:bold;
+}
+
+.track{
+background:#0b1018;
+border:1px solid var(--line);
+padding:15px;
+border-radius:12px;
+margin-top:12px;
+}
+
+footer{
+border-top:1px solid var(--line);
+padding:35px 18px;
+text-align:center;
+color:var(--muted);
+}
+
+.toast{
+position:fixed;
+bottom:25px;
+left:50%;
+transform:translateX(-50%) translateY(100px);
+background:#fff;
+color:#111;
+padding:14px 20px;
+border-radius:12px;
+font-weight:700;
+z-index:500;
+transition:.3s;
+box-shadow:0 15px 40px #0008;
+}
+
+.toast.show{
+transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:800px){
+
+.navlinks{
+display:none;
+position:absolute;
+top:70px;
+left:0;
+right:0;
+background:#0b1018;
+border-bottom:1px solid var(--line);
+padding:10px;
+flex-direction:column;
+}
+
+.navlinks.open{display:flex}
+
+.navlinks button{text-align:left;padding:15px}
+
+.menu{display:block}
+
+.hero{
+grid-template-columns:1fr;
+padding:55px 0;
+min-height:auto;
+}
+
+.heroCard{display:none}
+
+.cards{
+grid-template-columns:1fr;
+}
+
+.workspace{
+grid-template-columns:1fr;
+}
+
+.studioTop{
+align-items:flex-start;
+flex-direction:column;
+}
+
+.projectName{width:100%}
+
+.hero h1{letter-spacing:-2px}
+
+.stats{
+grid-template-columns:1fr 1fr 1fr;
+}
+
+.stat strong{font-size:18px}
+}
+
+@media(max-width:450px){
+main{padding:0 13px 60px}
+.nav{padding:0 13px}
+.logo{font-size:18px}
+.hero p{font-size:16px}
 }
 </style>
 </head>
@@ -73,146 +487,664 @@ font-size:17px;
 <body>
 
 <header>
-<h1>🇺🇬 Grayson On The Beats</h1>
-<div class="subtitle">🎙️ Ugandan Music Studio</div>
-<button onclick="openStudio()">Open Studio</button>
+<div class="nav">
+
+<div class="logo">🇺🇬 Grayson <span>On The Beats</span></div>
+
+<button class="menu" onclick="toggleMenu()">☰</button>
+
+<nav class="navlinks" id="navlinks">
+<button class="active" onclick="showPage('home',this)">Home</button>
+<button onclick="showPage('studio',this)">Studio</button>
+<button onclick="showPage('beats',this)">Beat Maker</button>
+<button onclick="showPage('recorder',this)">Recorder</button>
+<button onclick="showPage('about',this)">About</button>
+</nav>
+
+</div>
 </header>
 
-<section id="studio">
+<main>
 
-<h2>🎵 Welcome To The Studio</h2>
-<p class="subtitle">Start creating your next hit song.</p>
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+<div class="hero">
+
+<div>
+<div class="badge">🇺🇬 UGANDAN MUSIC • CREATION • RECORDING</div>
+
+<h1>Make music.<br><span>Build your sound.</span></h1>
+
+<p>
+Welcome to Grayson On The Beats — a modern music creation space for making beats, recording vocals, writing songs and working with audio directly from your phone.
+</p>
+
+<div class="actions">
+<button class="primary" onclick="showPage('studio')">🎛️ Open Studio</button>
+<button class="secondary" onclick="showPage('beats')">🎹 Make A Beat</button>
+</div>
+</div>
+
+<div class="heroCard">
+
+<div class="wave">
+<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+</div>
+
+<div class="stats">
+<div class="stat">
+<strong>🎹</strong>
+<small>Beat Maker</small>
+</div>
+
+<div class="stat">
+<strong>🎙️</strong>
+<small>Recorder</small>
+</div>
+
+<div class="stat">
+<strong>🎚️</strong>
+<small>Mixer</small>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="sectionTitle">
+<h2>Everything in one place.</h2>
+<p>Your browser becomes your small music workstation.</p>
+</div>
+
+<div class="cards">
 
 <div class="card">
-<h2>🎹 Beat Maker</h2>
-<p>Create a simple beat.</p>
-<button onclick="makeBeat()">▶️ Play Beat</button>
-<button onclick="stopBeat()">⏹️ Stop Beat</button>
-<div id="beatStatus"></div>
+<div class="icon">🎹</div>
+<h3>Beat Maker</h3>
+<p>Create a simple rhythm and control its tempo and volume.</p>
+<button class="openBtn" onclick="showPage('beats')">Open Beat Maker →</button>
 </div>
 
 <div class="card">
-<h2>🎙️ Voice Recorder</h2>
-<p>Record your voice using your phone microphone.</p>
-<button onclick="startRecording()">🔴 Start Recording</button>
-<button onclick="stopRecording()">⏹️ Stop Recording</button>
-<div id="recordStatus">Recorder ready.</div>
-<audio id="audio" controls style="display:none;width:90%;margin:15px auto;"></audio>
+<div class="icon">🎙️</div>
+<h3>Voice Recorder</h3>
+<p>Use your microphone to record vocals, ideas and demos.</p>
+<button class="openBtn" onclick="showPage('recorder')">Open Recorder →</button>
 </div>
 
 <div class="card">
-<h2>🎚️ Mixer</h2>
-<p>Adjust your music levels.</p>
-
-<label>🎵 Beat Volume</label>
-<input type="range" min="0" max="100" value="80"
-oninput="document.getElementById('beatVolume').innerText=this.value+'%'">
-
-<p id="beatVolume">80%</p>
-
-<label>🎙️ Voice Volume</label>
-<input type="range" min="0" max="100" value="80"
-oninput="document.getElementById('voiceVolume').innerText=this.value+'%'">
-
-<p id="voiceVolume">80%</p>
+<div class="icon">✍️</div>
+<h3>Song Workspace</h3>
+<p>Write lyrics, name your project and save your work.</p>
+<button class="openBtn" onclick="showPage('studio')">Open Workspace →</button>
 </div>
 
-<div class="card">
-<h2>✍️ Song Ideas</h2>
-<input id="songName" placeholder="Enter song name">
-<textarea id="lyrics" rows="5" placeholder="Write your lyrics here..."></textarea>
-<button onclick="saveSong()">💾 Save Song Idea</button>
-<div id="status"></div>
 </div>
-
-<button onclick="closeStudio()">⬅️ Close Studio</button>
 
 </section>
 
+
+<!-- STUDIO -->
+
+<section id="studio" class="page">
+
+<div class="studioTop">
+<div>
+<h2>🎛️ Studio</h2>
+<p style="color:#8e9aaa;margin-top:7px">Your music workspace</p>
+</div>
+
+<input class="projectName" id="projectName" placeholder="Project name">
+
+</div>
+
+<div class="workspace">
+
+<div>
+
+<div class="tool">
+<h3>🎵 Audio Project</h3>
+
+<input type="file" id="audioUpload" accept="audio/*">
+
+<audio id="mainAudio" controls></audio>
+
+<div class="meter">
+<div id="audioMeter"></div>
+</div>
+
+<p class="status" id="audioStatus">Upload an audio file to begin.</p>
+</div>
+
+<div class="tool">
+
+<h3>✍️ Song Writer</h3>
+
+<textarea id="lyrics" placeholder="Write your lyrics here...
+
+Verse 1:
+...
+
+Chorus:
+...
+
+Verse 2:
+..."></textarea>
+
+<button class="bigButton" onclick="saveProject()">💾 Save Project</button>
+<button class="darkButton" onclick="loadProject()">📂 Load Project</button>
+<button class="darkButton" onclick="clearProject()">🗑️ Clear</button>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="tool">
+<h3>🎚️ Mixer</h3>
+
+<label>🎵 Audio Volume</label>
+<input type="range" id="volume" min="0" max="100" value="80">
+
+<p class="status">Volume: <span id="volumeValue">80%</span></p>
+
+<label style="display:block;margin-top:20px">🎙️ Voice Level</label>
+<input type="range" id="voiceLevel" min="0" max="100" value="80">
+
+<p class="status">Voice: <span id="voiceValue">80%</span></p>
+</div>
+
+<div class="tool">
+<h3>⚡ Quick Actions</h3>
+
+<button class="darkButton" style="width:100%" onclick="showPage('beats')">
+🎹 Beat Maker
+</button>
+
+<button class="darkButton" style="width:100%" onclick="showPage('recorder')">
+🎙️ Voice Recorder
+</button>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BEAT MAKER -->
+
+<section id="beats" class="page">
+
+<div class="sectionTitle">
+<h2>🎹 Beat Maker</h2>
+<p>Create a simple rhythm directly in your browser.</p>
+</div>
+
+<div class="tool">
+
+<h3>Beat Controls</h3>
+
+<label>Tempo: <strong id="bpmValue">100 BPM</strong></label>
+<input type="range" id="bpm" min="60" max="180" value="100">
+
+<label>Beat Volume</label>
+<input type="range" id="beatVolume" min="0" max="100" value="50">
+
+<button class="bigButton" onclick="startBeat()">▶️ Play Beat</button>
+<button class="darkButton" onclick="stopBeat()">⏹️ Stop</button>
+
+<div class="meter">
+<div id="beatMeter"></div>
+</div>
+
+<p class="status" id="beatStatus">Beat maker ready.</p>
+
+</div>
+
+<div class="tool">
+
+<h3>🥁 Rhythm</h3>
+
+<div class="cards" style="grid-template-columns:repeat(4,1fr)">
+
+<div class="card">
+<strong>Kick</strong>
+<p>●</p>
+</div>
+
+<div class="card">
+<strong>Snare</strong>
+<p>◆</p>
+</div>
+
+<div class="card">
+<strong>Hi-Hat</strong>
+<p>×</p>
+</div>
+
+<div class="card">
+<strong>Bass</strong>
+<p>▬</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- RECORDER -->
+
+<section id="recorder" class="page">
+
+<div class="sectionTitle">
+<h2>🎙️ Voice Recorder</h2>
+<p>Record your voice using your phone microphone.</p>
+</div>
+
+<div class="tool">
+
+<h3>Recording Booth</h3>
+
+<button class="bigButton" onclick="startRecording()">🔴 Start Recording</button>
+<button class="darkButton" onclick="stopRecording()">⏹️ Stop Recording</button>
+
+<div class="meter">
+<div id="recordMeter"></div>
+</div>
+
+<p class="status" id="recordStatus">
+Ready. Tap Start Recording and allow microphone access.
+</p>
+
+<audio id="recordedAudio" controls style="display:none"></audio>
+
+<br>
+
+<a id="downloadRecording"
+download="grayson-recording.webm"
+class="primary"
+style="display:none;text-decoration:none;margin-top:15px">
+⬇️ Download Recording
+</a>
+
+</div>
+
+<div class="tool">
+<h3>⚠️ Microphone Permission</h3>
+<p>
+Your browser will ask for microphone permission. Choose
+<strong>Allow</strong>. Recording works on secure websites such as GitHub Pages.
+</p>
+</div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section id="about" class="page">
+
+<div class="sectionTitle">
+<h2>🇺🇬 About Grayson On The Beats</h2>
+<p>A music creation project built for artists and creators.</p>
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🎵</div>
+<h3>Create</h3>
+<p>Build beats, write lyrics and develop your next song idea.</p>
+</div>
+
+<div class="card">
+<div class="icon">🎙️</div>
+<h3>Record</h3>
+<p>Record vocals and demos using your device microphone.</p>
+</div>
+
+<div class="card">
+<div class="icon">🇺🇬</div>
+<h3>Ugandan Sound</h3>
+<p>A home for music creation inspired by Uganda and African sounds.</p>
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+<strong>🇺🇬 Grayson On The Beats</strong>
+<p style="margin-top:8px">Create • Record • Write • Build</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
 <script>
 
-function openStudio(){
-document.getElementById("studio").style.display="block";
-window.scrollTo({
-top:document.getElementById("studio").offsetTop,
-behavior:"smooth"
+/* NAVIGATION */
+
+function showPage(page,button){
+
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
 });
+
+const target=document.getElementById(page);
+
+if(target){
+target.classList.add("active");
+window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function closeStudio(){
-document.getElementById("studio").style.display="none";
-window.scrollTo({
-top:0,
-behavior:"smooth"
+document.querySelectorAll(".navlinks button").forEach(b=>{
+b.classList.remove("active");
 });
+
+if(button){
+button.classList.add("active");
 }
 
-let audioContext;
-let oscillator;
+document.getElementById("navlinks").classList.remove("open");
 
-function makeBeat(){
-audioContext=new (window.AudioContext||window.webkitAudioContext)();
+}
 
-oscillator=audioContext.createOscillator();
-let gain=audioContext.createGain();
+/* MOBILE MENU */
 
-oscillator.type="sine";
-oscillator.frequency.value=120;
-gain.gain.value=0.15;
+function toggleMenu(){
+document.getElementById("navlinks").classList.toggle("open");
+}
 
-oscillator.connect(gain);
-gain.connect(audioContext.destination);
+/* TOAST */
 
-oscillator.start();
+function toast(message){
 
-document.getElementById("beatStatus").innerText="🎵 Beat is playing...";
+const t=document.getElementById("toast");
+
+t.innerText=message;
+t.classList.add("show");
+
+setTimeout(()=>{
+t.classList.remove("show");
+},2500);
+
+}
+
+/* AUDIO UPLOAD */
+
+const audioUpload=document.getElementById("audioUpload");
+const mainAudio=document.getElementById("mainAudio");
+
+audioUpload.addEventListener("change",function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+const url=URL.createObjectURL(file);
+
+mainAudio.src=url;
+
+document.getElementById("audioStatus").innerText=
+"✅ "+file.name+" loaded successfully.";
+
+toast("Audio loaded");
+
+});
+
+/* AUDIO VOLUME */
+
+const volume=document.getElementById("volume");
+
+volume.addEventListener("input",function(){
+
+mainAudio.volume=this.value/100;
+
+document.getElementById("volumeValue").innerText=this.value+"%";
+
+});
+
+/* VOICE LEVEL */
+
+document.getElementById("voiceLevel").addEventListener("input",function(){
+
+document.getElementById("voiceValue").innerText=this.value+"%";
+
+});
+
+/* BEAT MAKER */
+
+let beatContext=null;
+let beatTimer=null;
+let beatPlaying=false;
+
+const bpm=document.getElementById("bpm");
+
+bpm.addEventListener("input",function(){
+document.getElementById("bpmValue").innerText=this.value+" BPM";
+});
+
+function kick(){
+
+if(!beatContext)return;
+
+const osc=beatContext.createOscillator();
+const gain=beatContext.createGain();
+
+osc.frequency.setValueAtTime(130,beatContext.currentTime);
+osc.frequency.exponentialRampToValueAtTime(
+45,
+beatContext.currentTime+0.15
+);
+
+gain.gain.setValueAtTime(
+document.getElementById("beatVolume").value/100,
+beatContext.currentTime
+);
+
+gain.gain.exponentialRampToValueAtTime(
+0.001,
+beatContext.currentTime+0.15
+);
+
+osc.connect(gain);
+gain.connect(beatContext.destination);
+
+osc.start();
+osc.stop(beatContext.currentTime+0.15);
+
+}
+
+function snare(){
+
+if(!beatContext)return;
+
+const buffer=beatContext.createBuffer(
+1,
+beatContext.sampleRate*.12,
+beatContext.sampleRate
+);
+
+const data=buffer.getChannelData(0);
+
+for(let i=0;i<data.length;i++){
+data[i]=Math.random()*2-1;
+}
+
+const source=beatContext.createBufferSource();
+const gain=beatContext.createGain();
+
+source.buffer=buffer;
+
+gain.gain.setValueAtTime(.18,beatContext.currentTime);
+gain.gain.exponentialRampToValueAtTime(
+.001,
+beatContext.currentTime+.12
+);
+
+source.connect(gain);
+gain.connect(beatContext.destination);
+
+source.start();
+
+}
+
+let step=0;
+
+function beatStep(){
+
+if(!beatPlaying)return;
+
+if(step%4===0)kick();
+
+if(step%4===2)snare();
+
+const meter=document.getElementById("beatMeter");
+
+meter.style.width=(20+Math.random()*80)+"%";
+
+step++;
+
+}
+
+function startBeat(){
+
+if(beatPlaying)return;
+
+beatContext=new(window.AudioContext||window.webkitAudioContext)();
+
+beatPlaying=true;
+step=0;
+
+const speed=60000/Number(bpm.value)/2;
+
+beatStep();
+
+beatTimer=setInterval(beatStep,speed);
+
+document.getElementById("beatStatus").innerText=
+"🎵 Beat playing...";
+
 }
 
 function stopBeat(){
-if(oscillator){
-oscillator.stop();
-oscillator=null;
-document.getElementById("beatStatus").innerText="⏹️ Beat stopped.";
-}
+
+beatPlaying=false;
+
+if(beatTimer){
+clearInterval(beatTimer);
+beatTimer=null;
 }
 
-let recorder;
-let chunks=[];
+if(beatContext){
+beatContext.close();
+beatContext=null;
+}
+
+document.getElementById("beatMeter").style.width="0%";
+
+document.getElementById("beatStatus").innerText=
+"⏹️ Beat stopped.";
+
+}
+
+
+/* VOICE RECORDER */
+
+let mediaRecorder=null;
+let recordingChunks=[];
+let recordingStream=null;
+let recordTimer=null;
+let recordSeconds=0;
 
 async function startRecording(){
 
+if(mediaRecorder && mediaRecorder.state==="recording")return;
+
 try{
 
-let stream=await navigator.mediaDevices.getUserMedia({audio:true});
+recordingStream=
+await navigator.mediaDevices.getUserMedia({audio:true});
 
-recorder=new MediaRecorder(stream);
-chunks=[];
+mediaRecorder=new MediaRecorder(recordingStream);
 
-recorder.ondataavailable=e=>{
-chunks.push(e.data);
+recordingChunks=[];
+recordSeconds=0;
+
+mediaRecorder.ondataavailable=function(event){
+
+if(event.data.size>0){
+recordingChunks.push(event.data);
+}
+
 };
 
-recorder.onstop=()=>{
+mediaRecorder.onstop=function(){
 
-let blob=new Blob(chunks,{type:"audio/webm"});
-let url=URL.createObjectURL(blob);
+const blob=new Blob(
+recordingChunks,
+{type:"audio/webm"}
+);
 
-let audio=document.getElementById("audio");
+const url=URL.createObjectURL(blob);
+
+const audio=document.getElementById("recordedAudio");
+
 audio.src=url;
 audio.style.display="block";
 
-document.getElementById("recordStatus").innerText="✅ Recording finished.";
+const download=document.getElementById("downloadRecording");
+
+download.href=url;
+download.style.display="inline-block";
+
+document.getElementById("recordStatus").innerText=
+"✅ Recording complete.";
+
+if(recordingStream){
+recordingStream.getTracks().forEach(track=>track.stop());
+}
 
 };
 
-recorder.start();
+mediaRecorder.start();
 
-document.getElementById("recordStatus").innerText="🔴 Recording...";
+document.getElementById("recordStatus").classList.add("recording");
+
+document.getElementById("recordStatus").innerText=
+"🔴 Recording... 0 seconds";
+
+recordTimer=setInterval(()=>{
+
+recordSeconds++;
+
+document.getElementById("recordStatus").innerText=
+"🔴 Recording... "+recordSeconds+" seconds";
+
+document.getElementById("recordMeter").style.width=
+(20+Math.random()*80)+"%";
+
+},1000);
+
+toast("Recording started");
 
 }catch(error){
 
 document.getElementById("recordStatus").innerText=
-"❌ Microphone permission was not allowed.";
+"❌ Microphone access was denied or is unavailable.";
+
+toast("Microphone permission required");
 
 }
 
@@ -220,30 +1152,60 @@ document.getElementById("recordStatus").innerText=
 
 function stopRecording(){
 
-if(recorder && recorder.state!=="inactive"){
-recorder.stop();
-}
+if(mediaRecorder && mediaRecorder.state==="recording"){
+
+mediaRecorder.stop();
+
+clearInterval(recordTimer);
+
+document.getElementById("recordStatus").classList.remove("recording");
+
+document.getElementById("recordMeter").style.width="0%";
+
+toast("Recording stopped");
 
 }
 
-function saveSong(){
+}
 
-let name=document.getElementById("songName").value;
-let lyrics=document.getElementById("lyrics").value;
 
-if(name==="" && lyrics===""){
-document.getElementById("status").innerText="⚠️ Write something first.";
+/* SAVE PROJECT */
+
+function saveProject(){
+
+const project={
+name:document.getElementById("projectName").value,
+lyrics:document.getElementById("lyrics").value,
+date:new Date().toLocaleString()
+};
+
+localStorage.setItem(
+"graysonProject",
+JSON.stringify(project)
+);
+
+toast("✅ Project saved on this device");
+
+}
+
+/* LOAD PROJECT */
+
+function loadProject(){
+
+const saved=localStorage.getItem("graysonProject");
+
+if(!saved){
+
+toast("No saved project found");
+
 return;
-}
-
-localStorage.setItem("songName",name);
-localStorage.setItem("lyrics",lyrics);
-
-document.getElementById("status").innerText="✅ Song idea saved on this device.";
 
 }
 
-</script>
+const project=JSON.parse(saved);
 
-</body>
-  </html>
+document.getElementById("projectName").value=
+project.name||"";
+
+document.getElementById("lyrics").value=
+project.lyrics||"
